@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050a0a">
+  <meta name="description" content="Neon Serpent — a precision neon arcade snake game. Eat the light, chain your flow, and own the grid.">
+  <title>Neon Serpent — Arcade Protocol 07</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23070f0c'/%3E%3Cpath d='M10 27.5c0-6.5 4.6-9.1 10.1-9.1 5.1 0 9.9-2.5 9.9-8' fill='none' stroke='%23b7ff62' stroke-width='3.4' stroke-linecap='round'/%3E%3Ccircle cx='30' cy='9.5' r='2.8' fill='%23b7ff62'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient-orb orb-one"></span>
+    <span class="ambient-orb orb-two"></span>
+    <span class="ambient-orb orb-three"></span>
+    <span class="ambient-grid"></span>
+    <span class="ambient-noise"></span>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Neon Serpent home" data-home>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <rect x="1" y="1" width="38" height="38" rx="11" stroke="currentColor" stroke-opacity=".22"/>
+            <path d="M10 27.5c0-6.5 4.6-9.1 10.1-9.1 5.1 0 9.9-2.5 9.9-8" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+            <circle cx="30" cy="9.5" r="2.8" fill="currentColor"/>
+            <circle cx="10" cy="28" r="2.2" fill="currentColor" fill-opacity=".35"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">SERPENT<span class="brand-slash">//</span></span>
+          <span class="brand-sub">NEON ARCADE</span>
+        </span>
+      </a>
+
+      <div class="protocol" aria-hidden="true">
+        <span class="signal"><span class="signal-dot"></span> SYSTEM ONLINE</span>
+        <span class="slash">/</span>
+        <span>PROTOCOL <b>07</b></span>
+      </div>
+
+      <div class="top-actions">
+        <button class="utility-btn sound-btn" id="soundToggle" type="button" aria-pressed="true" aria-label="Toggle sound">
+          <span class="sound-icon" aria-hidden="true">
+            <svg class="icon-on" viewBox="0 0 24 24" fill="none">
+              <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M15.5 8.5a5 5 0 0 1 0 7M18.2 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <svg class="icon-off" viewBox="0 0 24 24" fill="none">
+              <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="m16 9 5 5m0-5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="utility-label" id="soundLabel">SOUND ON</span>
+        </button>
+        <button class="utility-btn" id="helpToggle" type="button" aria-label="How to play">
+          <span class="utility-icon" aria-hidden="true">?</span>
+          <span class="utility-label">HOW TO PLAY</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <aside class="side-panel panel-left" aria-label="Run statistics">
+        <div class="panel-kicker"><span>RUN TELEMETRY</span><span class="panel-index">01</span></div>
+
+        <div class="score-cluster">
+          <span class="label">CURRENT SCORE</span>
+          <strong class="score-value" id="scoreDisplay">000000</strong>
+          <div class="best-line">
+            <span>PERSONAL BEST</span>
+            <b id="bestDisplay">000000</b>
+          </div>
+        </div>
+
+        <div class="rule"></div>
+
+        <div class="stat-row">
+          <div class="stat-head"><span>LENGTH</span><b id="lengthDisplay">04</b></div>
+          <div class="meter"><span id="lengthMeter" style="width: 16%"></span></div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-head"><span>VELOCITY</span><b id="speedDisplay">1.0×</b></div>
+          <div class="meter meter-alt"><span id="speedMeter" style="width: 26%"></span></div>
+        </div>
+
+        <div class="sector-card">
+          <div class="sector-head"><span>SECTOR</span><b>07</b></div>
+          <div class="sector-map" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <span class="sector-foot">GRID 24 × 24 / STABLE</span>
+        </div>
+
+        <div class="run-log">
+          <div class="run-log-head"><span>RUN LOG</span><b id="runTag">STANDBY</b></div>
+          <div class="run-log-grid">
+            <div><span>NODES</span><b id="nodesDisplay">00</b></div>
+            <div><span>CORES</span><b id="coresDisplay">00</b></div>
+            <div><span>PEAK</span><b id="peakDisplay">×1</b></div>
+          </div>
+        </div>
+
+        <p class="panel-note">Guide the serpent. Absorb energy. Never fold back into your own signal.</p>
+      </aside>
+
+      <section class="arena" aria-label="Neon Serpent game">
+        <div class="stage-meta">
+          <div class="stage-label"><span class="live-pip"></span> LIVE FEED <span class="mini-slash">/</span> <span id="statusLabel">STANDBY</span></div>
+          <div class="stage-meta-right">
+            <div class="stage-grid-label">GRID<span>24</span></div>
+            <button class="stage-pause" id="stagePauseBtn" type="button" aria-label="Pause run">
+              <span class="stage-pause-icon" aria-hidden="true"><i></i><i></i></span>
+              <span class="stage-pause-label">PAUSE</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="compact-hud" aria-label="Score summary">
+          <div class="compact-stat"><span>SCORE</span><b id="compactScore">000000</b></div>
+          <div class="compact-stat"><span>BEST</span><b id="compactBest">000000</b></div>
+          <div class="compact-stat"><span>FLOW</span><b id="compactStreak">×1</b></div>
+        </div>
+
+        <div class="frame-wrap">
+          <div class="game-frame" id="gameFrame">
+            <canvas id="gameCanvas" width="720" height="720" aria-label="Neon Serpent game board. Use arrow keys or WASD to steer."></canvas>
+            <div class="screen-glare" aria-hidden="true"></div>
+            <div class="scanlines" aria-hidden="true"></div>
+            <div class="frame-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+            <div class="screen-overlay start-screen" id="startOverlay">
+              <div class="start-index" aria-hidden="true">07</div>
+              <div class="hero-copy">
+                <div class="hero-kicker"><span class="kicker-line"></span> ARCADE PROTOCOL <b>//</b> 001</div>
+                <h1><span>NEON</span><span class="accent">SERPENT</span></h1>
+                <p class="hero-tagline">EAT THE LIGHT. OWN THE GRID.</p>
+                <p class="hero-desc">Chain energy nodes, build your flow, and keep the serpent alive. One wrong turn ends the run.</p>
+
+                <div class="hero-actions">
+                  <button class="primary-btn" id="startBtn" type="button" aria-label="Start game">
+                    <span class="btn-play" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none"><path d="M6.5 4.5 15 10l-8.5 5.5v-11Z" fill="currentColor"/></svg>
+                    </span>
+                    <span>START RUN</span>
+                    <span class="btn-key" aria-hidden="true">↵</span>
+                  </button>
+                  <button class="text-btn" id="startHelpBtn" type="button">HOW TO PLAY <span aria-hidden="true">↗</span></button>
+                </div>
+
+                <div class="hero-meta">
+                  <span>BEST <b id="menuBest">000000</b></span>
+                  <span class="meta-sep">/</span>
+                  <span class="desktop-only">ARROWS OR <b>WASD</b> TO STEER</span>
+                  <span class="mobile-only">SWIPE TO STEER</span>
+                </div>
+              </div>
+              <div class="hero-badge" aria-hidden="true">
+                <span>RUN</span>
+                <b>01</b>
+                <i></i>
+                <span>READY</span>
+              </div>
+            </div>
+
+            <div class="screen-overlay pause-screen hidden" id="pauseOverlay">
+              <div class="modal-panel pause-panel">
+                <div class="panel-kicker"><span>RUN SUSPENDED</span><span class="panel-index">||</span></div>
+                <h2 class="overlay-title">PAUSED</h2>
+                <p class="overlay-sub">The grid is holding its breath.</p>
+                <div class="overlay-actions">
+                  <button class="primary-btn compact-primary" id="resumeBtn" type="button"><span>RESUME RUN</span><span class="btn-key">P</span></button>
+                  <button class="text-btn" id="pauseRestartBtn" type="button">RESTART <span aria-hidden="true">↻</span></button>
+                </div>
+                <div class="overlay-hint"><kbd>P</kbd> or <kbd>ESC</kbd> to resume</div>
+              </div>
+            </div>
+
+            <div class="screen-overlay gameover-screen hidden" id="gameoverOverlay">
+              <div class="modal-panel gameover-panel">
+                <div class="panel-kicker danger"><span>SIGNAL TERMINATED</span><span class="panel-index">ERR</span></div>
+                <div class="new-record hidden" id="newRecord"><span></span> NEW PERSONAL BEST <span></span></div>
+                <h2 class="overlay-title gameover-title">RUN<br><span>ENDED</span></h2>
+                <div class="final-score">
+                  <span>FINAL SCORE</span>
+                  <strong id="finalScore">000000</strong>
+                </div>
+                <div class="final-stats">
+                  <div><span>LENGTH</span><b id="finalLength">04</b></div>
+                  <div><span>BEST</span><b id="finalBest">000000</b></div>
+                  <div><span>PEAK FLOW</span><b id="finalStreak">×1</b></div>
+                </div>
+                <div class="overlay-actions">
+                  <button class="primary-btn compact-primary" id="restartBtn" type="button"><span>RUN IT BACK</span><span class="btn-key">R</span></button>
+                  <button class="text-btn" id="menuBtn" type="button">BACK TO STANDBY</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="event-toast" id="eventToast" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="stage-footer">
+          <div class="key-hints">
+            <span class="key-group"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><em>MOVE</em></span>
+            <span class="key-group"><kbd>P</kbd><em>PAUSE</em></span>
+            <span class="key-group"><kbd>M</kbd><em>MUTE</em></span>
+          </div>
+          <span class="stage-tag">SERPENT.OS <b>v1.0</b></span>
+        </div>
+        <div class="mobile-brief" aria-hidden="true">
+          <span><i></i> D-PAD OR SWIPE</span>
+          <span><i></i> CHAIN FLOW</span>
+          <span><i></i> AVOID TRAILS</span>
+        </div>
+
+        <div class="touch-controls is-idle" id="touchControls" aria-label="Touch directions">
+          <div class="dpad">
+            <button class="dpad-btn dpad-up" type="button" data-dir="up" aria-label="Move up"><span>▲</span></button>
+            <button class="dpad-btn dpad-left" type="button" data-dir="left" aria-label="Move left"><span>◀</span></button>
+            <div class="dpad-core" aria-hidden="true"><i></i></div>
+            <button class="dpad-btn dpad-right" type="button" data-dir="right" aria-label="Move right"><span>▶</span></button>
+            <button class="dpad-btn dpad-down" type="button" data-dir="down" aria-label="Move down"><span>▼</span></button>
+          </div>
+          <button class="touch-pause" id="touchPauseBtn" type="button" aria-label="Pause game"><span></span><span></span><em>PAUSE</em></button>
+        </div>
+      </section>
+
+      <aside class="side-panel panel-right" aria-label="Mission information">
+        <div class="panel-kicker"><span>MISSION BRIEF</span><span class="panel-index">02</span></div>
+
+        <div class="objective">
+          <span class="objective-no">A</span>
+          <p>Absorb energy nodes and keep the chain alive. The grid gets faster every time you feed.</p>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="node-icon node-normal"></span>
+            <div><b>ENERGY NODE</b><span>+10 base score</span></div>
+          </div>
+          <div class="legend-item">
+            <span class="node-icon node-gold"></span>
+            <div><b>PULSE CORE</b><span>+50 base score</span></div>
+          </div>
+        </div>
+
+        <div class="flow-card">
+          <div class="flow-head">
+            <span>FLOW CHAIN</span>
+            <b id="streakDisplay">×1</b>
+          </div>
+          <div class="flow-pips" id="flowPips" aria-hidden="true"><i class="active"></i><i></i><i></i><i></i><i></i></div>
+          <div class="flow-track"><span id="flowTimer"></span></div>
+          <p>Feed within <b>4 seconds</b> to multiply the next pickup.</p>
+        </div>
+
+        <div class="record-card">
+          <span>LOCAL RECORD</span>
+          <div><b id="sideBest">000000</b><em>PTS</em></div>
+          <i class="record-line"></i>
+        </div>
+
+        <p class="panel-note tip-note"><span aria-hidden="true">↳</span> Golden cores decay. Chase the glow.</p>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <span>NEON SERPENT <b>//</b> ARCADE SYSTEM</span>
+      <span class="footer-center">BUILT FOR THE GRID <i></i> NO QUARTERS</span>
+      <span>BUILD 1.0.7 <b>//</b> LOCAL SESSION</span>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop hidden" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-modal">
+      <button class="modal-close" id="helpClose" type="button" aria-label="Close how to play">×</button>
+      <div class="panel-kicker"><span>FIELD MANUAL</span><span class="panel-index">03</span></div>
+      <h2 id="helpTitle">HOW TO <span>PLAY</span></h2>
+      <p class="help-intro">Stay alive. Feed the serpent. The longer you last, the faster the grid moves.</p>
+
+      <div class="help-grid">
+        <div class="help-item">
+          <div class="help-icon" aria-hidden="true">
+            <span class="mini-key">↑</span><span class="mini-key">←</span><span class="mini-key">↓</span><span class="mini-key">→</span>
+          </div>
+          <div><b>STEER</b><span>Arrow keys or WASD. Swipe on touch screens.</span></div>
+        </div>
+        <div class="help-item">
+          <div class="help-icon orbit-icon" aria-hidden="true"><i></i></div>
+          <div><b>COLLECT</b><span>Green nodes score +10. Rare gold cores score +50.</span></div>
+        </div>
+        <div class="help-item">
+          <div class="help-icon flow-icon" aria-hidden="true"><b>×3</b></div>
+          <div><b>CHAIN FLOW</b><span>Pick up food within 4 seconds to raise your multiplier.</span></div>
+        </div>
+        <div class="help-item">
+          <div class="help-icon pause-icon" aria-hidden="true"><i></i><i></i></div>
+          <div><b>PAUSE</b><span>Press P or Esc any time. Press R to restart after a crash.</span></div>
+        </div>
+      </div>
+
+      <div class="help-warning"><span>!</span> The perimeter and your own trail are lethal. Plan two turns ahead.</div>
+      <button class="primary-btn help-start" id="helpStartBtn" type="button"><span>ENTER THE GRID</span><span class="btn-key">↵</span></button>
+    </div>
+  </div>
+
+  <div class="sr-only" id="liveStatus" aria-live="polite"></div>
+
+  <script src="./game.js"></script>
+</body>
+</html>
