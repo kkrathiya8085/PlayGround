@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#071322">
+  <title>Bladebound — Fruit Ninja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell" id="gameShell">
+    <canvas id="game" aria-label="Fruit slicing game"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar" id="topbar">
+      <div class="brand"><span class="brand-mark">✦</span><span>BLADE<span class="brand-light">BOUND</span></span></div>
+      <div class="top-actions">
+        <button class="icon-btn sound-btn" id="soundBtn" aria-label="Toggle sound">♫</button>
+        <button class="icon-btn pause-btn" id="pauseBtn" aria-label="Pause game">Ⅱ</button>
+      </div>
+    </header>
+    <section class="hud" id="hud" aria-live="polite">
+      <div class="hud-block score-block"><span class="hud-label">SCORE</span><strong id="score">0000</strong></div>
+      <div class="combo-readout" id="comboReadout"><span class="combo-num" id="comboNum">3</span><span class="combo-word">HIT<br>COMBO</span></div>
+      <div class="hud-block lives-block"><span class="hud-label">MISSES</span><div class="hearts" id="hearts"><i>◆</i><i>◆</i><i>◆</i></div></div>
+    </section>
+    <div class="chain-callout" id="chainCallout"><span>✦</span> CHAIN SLASH <b id="chainCount">+3</b></div>
+
+    <section class="screen welcome-screen" id="welcomeScreen">
+      <div class="eyebrow"><span></span> THE SLICING ARCADE <span></span></div>
+      <h1>FRUIT<br><em>FRENZY</em></h1>
+      <p class="hero-copy">One blade. One chance.<br><b>How long can you keep the chain alive?</b></p>
+      <div class="hero-fruit" aria-hidden="true"><span class="fruit-orbit orbit-one"></span><span class="fruit-orbit orbit-two"></span><span class="fruit-emoji">🍉</span><span class="hero-spark spark-a">✦</span><span class="hero-spark spark-b">✧</span></div>
+      <button class="primary-btn" id="startBtn"><span>START SLICING</span><b>↗</b></button>
+      <div class="best-line">PERSONAL BEST <strong id="bestScore">0000</strong></div>
+      <div class="howto"><span class="swipe-icon">↗</span><span><b>SWIPE TO SLICE</b><small>Chain hits fast for a sword combo · Avoid bombs</small></span></div>
+    </section>
+
+    <section class="screen pause-screen hidden" id="pauseScreen">
+      <div class="mini-kicker">TAKE A BREATHER</div><h2>PAUSED</h2><p>Your blade is still sharp.</p>
+      <button class="primary-btn" id="resumeBtn"><span>BACK TO IT</span><b>↗</b></button>
+      <button class="text-btn" id="quitBtn">END RUN</button>
+    </section>
+
+    <section class="screen end-screen hidden" id="endScreen">
+      <div class="mini-kicker" id="endKicker">GOOD RUN</div><h2 id="endTitle">NICE<br><em>WORK.</em></h2>
+      <p class="result-score"><span>FINAL SCORE</span><strong id="finalScore">0000</strong></p>
+      <p class="new-best hidden" id="newBest">✦ NEW PERSONAL BEST ✦</p>
+      <button class="primary-btn" id="againBtn"><span>PLAY AGAIN</span><b>↗</b></button>
+      <button class="text-btn" id="homeBtn">BACK TO MENU</button>
+    </section>
+    <div class="toast" id="toast">PERFECT SLICE!</div>
+    <footer class="bottom-hint" id="bottomHint"><span>✦</span> KEEP YOUR BLADE MOVING <span>✦</span></footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
